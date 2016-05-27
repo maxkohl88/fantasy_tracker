@@ -80,6 +80,13 @@ GEM
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     pg (0.18.4)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     rack (2.0.0.rc1)
       json
     rack-test (0.6.3)
@@ -153,11 +160,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  byebug
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
   pg (~> 0.15)
+  pry-byebug
   rails (= 5.0.0.rc1)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
