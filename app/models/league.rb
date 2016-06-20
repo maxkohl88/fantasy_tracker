@@ -20,6 +20,37 @@ class League < ActiveRecord::Base
   	end
   end
 
+  def lifetime_player_matchup_metrics
+  	search = Search.new
+
+  	body = {
+  		query: {
+  			filtered: {
+  				query: { match_all: {} },
+  				filter: {
+  					bool: {
+  						must: [
+  							term: {
+  								league_id: self.id
+  							}
+  						]
+  					}
+  				}
+  			}
+  		},
+  		size: 1000
+  	}
+
+  	response = search.client.search index: :players, body: body
+
+  	docs = response['hits']['hits'].map do |doc|
+  		doc['_source']
+  	end
+
+  	docs.reject! { |doc| (doc['lifetime_win_percentage'].nil? || doc['lifetime_win_percentage'].nan?) }
+  	docs
+  end
+
   def unique_players
   	teams.map { |team| team.players }.flatten.uniq { |player| player.remote_id }
   end
