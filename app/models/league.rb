@@ -14,7 +14,8 @@ class League < ActiveRecord::Base
   																													name: player.name,
   																													player_id: player.id,
   																													league_id: self.id,
-  																													lifetime_win_percentage: percentage
+  																													lifetime_win_percentage: percentage,
+  																													matchup_count: lifetime_results[:total_matchups]
   																												}
   	end
   end
