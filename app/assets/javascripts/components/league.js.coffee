@@ -8,6 +8,13 @@ table_headers = [
 ]
 
 @League = React.createClass
+  getInitialState: ->
+    activePlayers: _.sortBy(@filteredMetrics(), 'lifetime_win_percentage').reverse()
+
+
+  filteredMetrics: ->
+    _.filter @props.player_metrics, (player) ->
+      player.matchup_count >= 30
 
   render: ->
     div
@@ -44,28 +51,33 @@ table_headers = [
             for header in table_headers
               th
                 key: header
+                scope: "column"
                 className: "league--player-table-header"
                 header
 
         tbody
-          for player in @props.player_metrics
+          for player in @state.activePlayers
             tr
               key: player.name
               className: "league--player-table-player-row"
 
               td
+                scope: "row"
                 className: "league--player-table-player-row-cell"
                 player.name
 
               td
+                scope: "row"
                 className: "league--player-table-player-row-cell"
                 player.lifetime_win_percentage
 
               td
+                scope: "row"
                 className: "league--player-table-player-row-cell"
                 player.matchup_count
 
               td
+                scope: "row"
                 className: "league--player-table-player-row-cell"
                 # player.titles
 
