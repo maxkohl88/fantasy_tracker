@@ -3,12 +3,32 @@ require 'open-uri'
 class League < ActiveRecord::Base
   has_many :seasons
 
+  def index_lifetime_player_matchup_metrics
+  	search = Search.new
+
+  	unique_players.each do |player|
+  		lifetime_results = player.lifetime_matchup_results
+  		percentage = ((lifetime_results[:wins].to_f / lifetime_results[:total_matchups].to_f) * 100.0).round(2)
+
+  		search.client.index index: :players, type: :rollup, body: {
+  																													name: player.name,
+  																													player_id: player.id,
+  																													league_id: self.id,
+  																													lifetime_win_percentage: percentage
+  																												}
+  	end
+  end
+
+  def unique_players
+  	teams.map { |team| team.players }.flatten.uniq { |player| player.remote_id }
+  end
+
   def create_season(year)
   	Season.create year: year, league: self
   end
 
   def teams(year = nil)
-  	seasons.map { |season| season.teams }.uniq
+  	seasons.map { |season| season.teams }.flatten.uniq
   end
 
   def bootstrap_new_season(year)
