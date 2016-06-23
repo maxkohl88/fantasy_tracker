@@ -4,21 +4,26 @@ class Player < ActiveRecord::Base
   has_many :contracts
   has_many :teams, through: :contracts
 
-  def stats
-    { name: name, win_percentage: win_percentage, post_seasons: post_seasons, titles: titles }
+  def index_lifetime_matchup_results
+    lifetime_results = player.lifetime_matchup_results
+    percentage = ((lifetime_results[:wins].to_f / lifetime_results[:total_matchups].to_f) * 100.0).round(2)
+
+    search.client.index index: :players, type: :rollup, body: {
+                                                          name: player.name,
+                                                          player_id: player.id,
+                                                          league_id: self.id,
+                                                          lifetime_win_percentage: percentage,
+                                                          matchup_count: lifetime_results[:total_matchups]
+                                                        }
   end
 
+  private
+
   def lifetime_matchup_results
-  	# 1. Get all matchups this player has been involved in
-  	# 2. For each matchup, determine if player "won" or "lost" it
-
-
-
   	results_hash = { wins: 0, losses: 0, ties: 0, total_matchups: 0 }
 
   	matchups.each do |matchup|
       next if matchup.week > 21
-      # need team results for each team from the matchup
       results = TeamResult.where matchup: matchup
 
       player_team = results.each do |result|
@@ -41,5 +46,11 @@ class Player < ActiveRecord::Base
   	end
 
     results_hash
+  end
+
+  private
+
+  def search
+    @search ||= Search.new
   end
 end
