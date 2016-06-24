@@ -38,7 +38,7 @@ class League < ActiveRecord::Base
 
   def bootstrap_new_season(year)
   	create_season year
-  	import_teams year
+  	import_teams year, source_doc("http://games.espn.go.com/flb/standings?leagueId=#{remote_id}&seasonId=#{year}")
   	import_weekly_results year
   end
 
@@ -60,12 +60,14 @@ class League < ActiveRecord::Base
     Season.create year: year, league: self
   end
 
-  def import_teams(year)
+  def source_doc(path)
+    Nokogiri::HTML open(path)
+  end
+
+  def import_teams(year, source)
     season = Season.find_by league: self, year: year
 
-    standings = Nokogiri::HTML open("http://games.espn.go.com/flb/standings?leagueId=#{remote_id}&seasonId=#{year}")
-
-    table = standings.css('table.tableBody')
+    table = source.css('table.tableBody')
     team_rows = table.css('tr.tableBody')
 
     team_rows.each do |team_row|
