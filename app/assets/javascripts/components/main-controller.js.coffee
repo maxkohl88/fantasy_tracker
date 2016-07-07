@@ -5,7 +5,6 @@ LeagueList = React.createFactory @LeagueList
   render: ->
     div className: "main-container",
       div className: "main--league-list-container",
-        debugger
         LeagueList
           leagues: @props.leagues
 
