@@ -75,13 +75,23 @@ table_headers = [
                 scope: "row"
                 className: "league--player-table-player-row-cell"
                 player.matchup_count
+      div className: "row league--buttons-container",
+        div className: "small-4 columns league--buttons-gutter"
+        div className: "small-4 columns league--buttons",
 
               td
                 scope: "row"
                 className: "league--player-table-player-row-cell"
                 # player.titles
+          LeagueButton
+            onChange: @handleViewChange
+            text: "Player Stats"
 
+          LeagueButton
+            onChange: @handleViewChange
+            text: "Team Stats"
 
+        div className: "small-4 columns league--buttons-gutter"
 
 
 
