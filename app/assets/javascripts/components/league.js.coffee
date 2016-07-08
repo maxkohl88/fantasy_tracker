@@ -35,5 +35,6 @@ TeamTable = React.createFactory @TeamTable
             players: @props.player_metrics
         else
           TeamTable
+            teams: _.sortBy(@props.team_metrics, 'wins').reverse()
 
 
