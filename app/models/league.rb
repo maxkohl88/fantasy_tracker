@@ -3,6 +3,35 @@ require 'open-uri'
 class League < ActiveRecord::Base
   has_many :seasons
 
+  def lifetime_team_metrics
+    metrics = {}
+
+    seasons.each do |season|
+      paired_standings = season.standings_paired_to_remote_ids
+
+      paired_standings.each do |remote_id, standings|
+        if metrics.has_key? remote_id
+          metrics[remote_id].merge!(standings) { |key, v1, v2| v1 + v2 }
+        else
+          metrics[remote_id] = standings
+        end
+      end
+    end
+
+    metrics_with_names = []
+
+    metrics.each do |remote_id, standings|
+      metrics_with_names << {
+        name: Team.where(remote_id: remote_id).last.name,
+        wins: standings[:wins],
+        losses: standings[:losses],
+        ties: standings[:ties]
+      }
+    end
+
+    metrics_with_names
+  end
+
   def index_lifetime_player_matchup_metrics
     unique_players.each { |player| player.index_lifetime_matchup_results }
   end
