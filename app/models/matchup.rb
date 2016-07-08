@@ -2,8 +2,8 @@ require 'open-uri'
 
 class Matchup < ActiveRecord::Base
 	belongs_to :season
-	has_many :team_matchups
-	has_many :teams, through: :team_matchups
+	has_many :team_results
+	has_many :teams, through: :team_results
 
 
 	def extract_results
