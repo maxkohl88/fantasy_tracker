@@ -6,7 +6,6 @@ table_headers = [
   "Player"
   "Matchup Winning %"
   "Matchup Count"
-  "Titles Won"
 ]
 
 @PlayerTable = React.createClass
@@ -68,8 +67,3 @@ table_headers = [
 	            scope: "row"
 	            className: "league--table-cell"
 	            player.matchup_count
-
-	          td
-	            scope: "row"
-	            className: "league--table-cell"
-	            # player.titles
