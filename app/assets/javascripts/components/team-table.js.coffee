@@ -1,4 +1,4 @@
-{div, table, thead, tbody, tr, th, td} = React.DOM
+{div, table, thead, tbody, tr, th, td, p} = React.DOM
 
 table_headers = [
 	"Team"
@@ -17,6 +17,8 @@ table_headers = [
 
 	render: ->
 		div className: "league--table-container",
+			p className: "league--table-disclaimer",
+				"Standings from 2011 through 2015."
 			table className: "league--table",
 				thead className: "league--table-head",
 					tr className: "league--table-headers",
