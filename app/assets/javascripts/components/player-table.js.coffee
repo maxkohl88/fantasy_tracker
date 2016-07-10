@@ -3,15 +3,14 @@
 TablePageTab = React.createFactory @TablePageTab
 
 table_headers = [
-  "Player"
-  "Matchup Winning %"
-  "Matchup Count"
-  "Titles Won"
+	"Player"
+	"Matchup Winning %"
+	"Matchup Count"
 ]
 
 @PlayerTable = React.createClass
 	getInitialState: ->
-	  activePlayers: @chunkedPlayers()[0]
+		activePlayers: @chunkedPlayers()[0]
 
 	filteredPlayers: ->
 		_.filter @props.players, (player) ->
@@ -31,7 +30,7 @@ table_headers = [
 		@setState activePlayers: @chunkedPlayers()[tab - 1]
 
 	render: ->
-		div className: "league--player-table-container",
+		div className: "league--table-container",
 			div className: "league--player-table-tabs",
 				_.times @playerBucketCount(), (index) =>
 					TablePageTab
@@ -39,37 +38,32 @@ table_headers = [
 						value: index + 1
 						onChange: @handleTabChange
 
-	  table className: "league--player-table",
-	    thead className: "league--player-table-head",
-	      tr className: "league--player-table-headers",
-	        for header in table_headers
-	        	th
-	        		key: header
-	        		className: "league--player-table-header"
-	        		header
+		table className: "league--table",
+			thead className: "league--table-head",
+				tr className: "league--table-headers",
+					for header in table_headers
+						th
+							key: header
+							className: "league--table-header"
+							header
 
-	    tbody className: "league--player-table-body",
-	      for player in @state.activePlayers
-	        tr
-	          key: player.name
-	          className: "league--player-table-player-row"
+			tbody className: "league--table-body",
+				for player in @state.activePlayers
+					tr
+						key: player.name
+						className: "league--table-row"
 
-	          td
-	            scope: "row"
-	            className: "league--player-table-player-row-cell"
-	            player.name
+						td
+							scope: "row"
+							className: "league--table-cell"
+							player.name
 
-	          td
-	            scope: "row"
-	            className: "league--player-table-player-row-cell"
-	            player.lifetime_win_percentage
+						td
+							scope: "row"
+							className: "league--table-cell"
+							player.lifetime_win_percentage
 
-	          td
-	            scope: "row"
-	            className: "league--player-table-player-row-cell"
-	            player.matchup_count
-
-	          td
-	            scope: "row"
-	            className: "league--player-table-player-row-cell"
-	            # player.titles
+						td
+							scope: "row"
+							className: "league--table-cell"
+							player.matchup_count
