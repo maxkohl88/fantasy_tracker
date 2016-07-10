@@ -4,32 +4,61 @@ class League < ActiveRecord::Base
   has_many :seasons
 
   def lifetime_team_metrics
-    metrics = {}
-
-    seasons.each do |season|
-      paired_standings = season.standings_paired_to_remote_ids
-
-      paired_standings.each do |remote_id, standings|
-        if metrics.has_key? remote_id
-          metrics[remote_id].merge!(standings) { |key, v1, v2| v1 + v2 }
-        else
-          metrics[remote_id] = standings
-        end
-      end
-    end
-
-    metrics_with_names = []
-
-    metrics.each do |remote_id, standings|
-      metrics_with_names << {
-        name: Team.where(remote_id: remote_id).last.name,
-        wins: standings[:wins],
-        losses: standings[:losses],
-        ties: standings[:ties]
+    body = {
+      query: {
+        filtered: {
+          query: { match_all: {} },
+          filter: {
+            bool: {
+              must: [
+                term: {
+                  league_id: self.id
+                }
+              ]
+            }
+          }
+        }
+      },
+      aggs: {
+        teams: {
+          terms: {
+            field: :remote_id,
+            size: 50
+          },
+          aggs: {
+            wins: {
+              sum: {
+                field: :wins
+              }
+            },
+            losses: {
+              sum: {
+                field: :losses
+              }
+            },
+            ties: {
+              sum: {
+                field: :ties
+              }
+            }
+          }
+        }
       }
+    }
+
+    response = search.client.search index: :teams, body: body
+
+    response['aggregations']['teams']['buckets'].each do |team_bucket|
+      team_bucket.delete 'doc_count'
+      team_bucket['name'] = Team.where(remote_id: team_bucket['key']).last.name
+      team_bucket.delete 'key'
     end
 
-    metrics_with_names
+    response['aggregations']['teams']['buckets']
+  end
+
+  def index_lifetime_team_standings
+    seasons.each { |season| season.index_team_standings }
   end
 
   def index_lifetime_player_matchup_metrics
