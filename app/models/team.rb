@@ -7,7 +7,7 @@ class Team < ActiveRecord::Base
 
 	def index_standings(standings)
 
-		search.client.index index: :teams, type: :rollup, body: {
+		search.index index: :teams, type: :rollup, body: {
 			name: name,
 			team_id: id,
 			remote_id: remote_id,
@@ -22,6 +22,6 @@ class Team < ActiveRecord::Base
 	private
 
 	def search
-		@search ||= Search.new
+		@search ||= Elasticsearch::Client.new
 	end
 end

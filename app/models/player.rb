@@ -8,7 +8,7 @@ class Player < ActiveRecord::Base
     lifetime_results = lifetime_matchup_results
     percentage = ((lifetime_results[:wins].to_f / lifetime_results[:total_matchups].to_f) * 100.0).round(2)
 
-    search.client.index index: :players, type: :rollup, body: {
+    search.index index: :players, type: :rollup, body: {
                                                           name: name,
                                                           player_id: id,
                                                           league_id: league_id,
@@ -51,6 +51,6 @@ class Player < ActiveRecord::Base
   private
 
   def search
-    @search ||= Search.new
+    @search ||= Elasticsearch::Client.new
   end
 end

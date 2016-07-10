@@ -46,7 +46,7 @@ class League < ActiveRecord::Base
       }
     }
 
-    response = search.client.search index: :teams, body: body
+    response = search.search index: :teams, body: body
 
     response['aggregations']['teams']['buckets'].each do |team_bucket|
       team_bucket.delete 'doc_count'
@@ -84,7 +84,7 @@ class League < ActiveRecord::Base
   		size: 1000
   	}
 
-  	response = search.client.search index: :players, body: body
+  	response = search.search index: :players, body: body
 
   	docs = response['hits']['hits'].map do |doc|
   		doc['_source']
@@ -103,7 +103,7 @@ class League < ActiveRecord::Base
   private
 
   def search
-    @search ||= Search.new
+    @search ||= Elasticsearch::Client.new
   end
 
   def teams(year = nil)
