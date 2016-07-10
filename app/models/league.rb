@@ -62,7 +62,7 @@ class League < ActiveRecord::Base
   end
 
   def index_lifetime_player_matchup_metrics
-    unique_players.each { |player| player.index_lifetime_matchup_results }
+    unique_players.each { |player| player.index_lifetime_matchup_results self.id }
   end
 
   def lifetime_player_matchup_metrics

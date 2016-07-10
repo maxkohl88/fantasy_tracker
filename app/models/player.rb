@@ -4,14 +4,14 @@ class Player < ActiveRecord::Base
   has_many :contracts
   has_many :teams, through: :contracts
 
-  def index_lifetime_matchup_results
-    lifetime_results = player.lifetime_matchup_results
+  def index_lifetime_matchup_results(league_id)
+    lifetime_results = lifetime_matchup_results
     percentage = ((lifetime_results[:wins].to_f / lifetime_results[:total_matchups].to_f) * 100.0).round(2)
 
     search.client.index index: :players, type: :rollup, body: {
-                                                          name: player.name,
-                                                          player_id: player.id,
-                                                          league_id: self.id,
+                                                          name: name,
+                                                          player_id: id,
+                                                          league_id: league_id,
                                                           lifetime_win_percentage: percentage,
                                                           matchup_count: lifetime_results[:total_matchups]
                                                         }
