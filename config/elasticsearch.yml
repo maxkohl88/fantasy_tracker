@@ -1,45 +1,45 @@
 players:
-  settings:
-    index:
-      number_of_shards: 1
-      number_of_replicas: 0
-      mapper:
-        dynamic: false
-  mappings:
-    rollup:
-      properties:
-        name:
-          type: "string"
-        lifetime_win_percentage:
-          type: "float"
-        league_id:
-          type: "integer"
-        player_id:
-          type: "integer"
+	settings:
+		index:
+			number_of_shards: 1
+			number_of_replicas: 0
+			mapper:
+				dynamic: false
+	mappings:
+		rollup:
+			properties:
+				name:
+					type: "string"
+				lifetime_win_percentage:
+					type: "float"
+				league_id:
+					type: "integer"
+				player_id:
+					type: "integer"
 
 teams:
-  settings:
-    index:
-      number_of_shards: 1
-      number_of_replicas: 0
-      mapper:
-        dynamic: false
-  mappings:
-    rollup:
-      properties:
-        name:
-          type: "string"
-        team_id:
-          type: "integer"
-        remote_id:
-          type: "integer"
-        season_id:
-          type: "integer"
-        league_id:
-          type: "integer"
-        wins:
-          type: "integer"
-        losses:
-          type: "integer"
-        ties:
-          type: "integer"
+	settings:
+		index:
+			number_of_shards: 1
+			number_of_replicas: 0
+			mapper:
+				dynamic: false
+	mappings:
+		rollup:
+			properties:
+				name:
+					type: "string"
+				team_id:
+					type: "integer"
+				remote_id:
+					type: "integer"
+				season_id:
+					type: "integer"
+				league_id:
+					type: "integer"
+				wins:
+					type: "integer"
+				losses:
+					type: "integer"
+				ties:
+					type: "integer"
